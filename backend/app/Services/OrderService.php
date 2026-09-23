@@ -142,7 +142,17 @@ class OrderService
         }
 
         return DB::transaction(function () use ($order) {
-            $order->update(['status' => 'cancelled']);
+            // Re-check under the lock: two concurrent cancel requests would
+            // otherwise both pass the status check above and both restock.
+            $locked = Order::whereKey($order->id)->lockForUpdate()->first();
+
+            if (! in_array($locked->status, ['pending', 'confirmed'], true)) {
+                throw ValidationException::withMessages([
+                    'status' => 'Bu sipariş artık iptal edilemez.',
+                ]);
+            }
+
+            $locked->update(['status' => 'cancelled']);
 
             foreach ($order->items as $item) {
                 $item->variant?->increment('stock', $item->quantity);

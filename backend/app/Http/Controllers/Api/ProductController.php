@@ -123,7 +123,7 @@ class ProductController extends Controller
      */
     public function related(Request $request, string $slug): JsonResponse
     {
-        $limit = (int) $request->query('limit', 4);
+        $limit = min(20, max(1, (int) $request->query('limit', 4)));
 
         $product = Product::where('slug', $slug)->with('categories')->first();
 

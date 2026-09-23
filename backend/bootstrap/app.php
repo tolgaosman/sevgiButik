@@ -35,6 +35,15 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias(['admin' => EnsureUserIsAdmin::class]);
+
+        /*
+         * Every request to Laravel arrives via the Next.js frontend container
+         * (Docker-internal network only — the backend publishes no port of
+         * its own), so that hop is always safe to trust for X-Forwarded-*.
+         * Without this, $request->ip() is always the frontend container's
+         * IP, which collapses every visitor onto one rate-limit bucket.
+         */
+        $middleware->trustProxies(at: ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

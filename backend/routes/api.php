@@ -22,10 +22,10 @@ Route::get('/products/{slug}/related', [ProductController::class, 'related']);
 Route::get('/products/{slug}/reviews', [ReviewController::class, 'index']);
 Route::get('/products/{slug}', [ProductController::class, 'show']);
 
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/password/forgot', [AuthController::class, 'forgotPassword']);
-Route::post('/password/reset', [AuthController::class, 'resetPassword']);
+Route::post('/password/reset', [AuthController::class, 'resetPassword'])->middleware('throttle:10,1');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -48,26 +48,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/orders', [OrderController::class, 'store']);
 });
 
-Route::get('/seed-now', function () {
-    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-    \App\Models\User::updateOrCreate(
-        ['email' => 'karabasaksevgi4@gmail.com'],
-        [
-            'name' => 'Sevgi Karabaşak',
-            'phone' => '5000000000',
-            'password' => bcrypt('sevgisevgibutikbutik'),
-            'is_admin' => true
-        ]
-    );
-    app(\Database\Seeders\CategorySeeder::class)->run();
-    app(\Database\Seeders\ProductSeeder::class)->run();
-    
-    return response()->json([
-        'success' => true,
-        'message' => 'Veritabanı başarıyla tohumlandı (seeded)! Sitenize gidip ürünleri görebilirsiniz.'
-    ]);
-});
-
 Route::get('/cart', [CartController::class, 'show']);
 Route::post('/cart/items', [CartController::class, 'store']);
 Route::patch('/cart/items/{item}', [CartController::class, 'update']);
@@ -79,7 +59,7 @@ Route::post('/orders/track', [OrderController::class, 'track']);
 
 Route::post('/contact', [ContactController::class, 'store']);
 
-Route::post('/newsletter', [NewsletterController::class, 'store']);
+Route::post('/newsletter', [NewsletterController::class, 'store'])->middleware('throttle:10,1');
 Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe']);
 
 // Admin Routes — session auth (auth:sanctum falls back to the web guard)

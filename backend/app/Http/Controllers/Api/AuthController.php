@@ -124,7 +124,15 @@ class AuthController extends Controller
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
-        $request->user()->update(['password' => Hash::make($data['password'])]);
+        $user = $request->user();
+        $user->update(['password' => Hash::make($data['password'])]);
+
+        // Drop every other session for this account — the current one is
+        // exempt so changing your own password doesn't log you out too.
+        \Illuminate\Support\Facades\DB::table('sessions')
+            ->where('user_id', $user->id)
+            ->where('id', '!=', $request->session()->getId())
+            ->delete();
 
         return response()->json(null, 204);
     }
@@ -187,6 +195,10 @@ class AuthController extends Controller
         }
 
         $user->update(['password' => Hash::make($data['password'])]);
+
+        // An OTP reset can be someone recovering a compromised account —
+        // every existing session (including a possible attacker's) must go.
+        \Illuminate\Support\Facades\DB::table('sessions')->where('user_id', $user->id)->delete();
 
         return response()->json(['message' => 'Şifreniz güncellendi.']);
     }

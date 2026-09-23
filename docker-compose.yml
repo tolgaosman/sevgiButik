@@ -28,6 +28,9 @@ x-backend-env: &backend-env
   MAIL_USERNAME: ${MAIL_USERNAME:-}
   MAIL_PASSWORD: ${MAIL_PASSWORD:-}
   MAIL_SCHEME: ${MAIL_SCHEME:-}
+  # Yalnizca `docker compose run --rm backend php artisan migrate --seed`
+  # calistirirken gerekir - normal `up` akisinda okunmaz.
+  ADMIN_SEED_PASSWORD: ${ADMIN_SEED_PASSWORD:-}
   MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS:-siparis@sevgibutik.com}
   MAIL_FROM_NAME: ${MAIL_FROM_NAME:-Sevgi Butik}
 
