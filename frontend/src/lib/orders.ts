@@ -11,7 +11,6 @@ export type OrderItem = {
 export type OrderStatus =
   | "pending"
   | "confirmed"
-  | "preparing"
   | "shipped"
   | "delivered"
   | "cancelled"
@@ -50,7 +49,6 @@ export type OrderTracking = Pick<
 export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   pending: "Beklemede",
   confirmed: "Onaylandı",
-  preparing: "Hazırlanıyor",
   shipped: "Kargoya Verildi",
   delivered: "Teslim Edildi",
   cancelled: "İptal Edildi",

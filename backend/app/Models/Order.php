@@ -42,12 +42,44 @@ class Order extends Model
     }
 
     /**
-     * "SB-10234" — derived from the auto-increment id after insert.
-     * Collision-free by construction; no counter table, no retry loop.
+     * Random, non-sequential order numbers ("SB-48213") — order tracking
+     * only asks for this number, so a guessable/sequential one would let
+     * anyone enumerate other customers' orders. Starts at 5 digits and
+     * only grows once that space gets crowded, so numbers stay short for
+     * as long as possible. Retries on the rare unique-constraint collision.
      */
     public function assignOrderNumber(): void
     {
-        $this->order_number = 'SB-'.(10233 + $this->id);
-        $this->saveQuietly();
+        for ($attempt = 0; $attempt < 10; $attempt++) {
+            $this->order_number = static::generateOrderNumber();
+            try {
+                $this->saveQuietly();
+
+                return;
+            } catch (\Illuminate\Database\QueryException $e) {
+                if ($attempt === 9) {
+                    throw $e;
+                }
+            }
+        }
+    }
+
+    private static function generateOrderNumber(): string
+    {
+        $digits = 5;
+
+        while (true) {
+            $min = (int) (10 ** ($digits - 1));
+            $max = (int) (10 ** $digits) - 1;
+
+            for ($attempt = 0; $attempt < 20; $attempt++) {
+                $candidate = 'SB-'.random_int($min, $max);
+                if (! static::where('order_number', $candidate)->exists()) {
+                    return $candidate;
+                }
+            }
+
+            $digits++;
+        }
     }
 }

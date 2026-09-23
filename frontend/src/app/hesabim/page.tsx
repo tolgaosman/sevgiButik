@@ -365,14 +365,8 @@ function PersonalInfoForm() {
     const data: Record<string, string> = {
       name: String(form.get("name")),
       email: String(form.get("email")),
+      phone: String(form.get("phone")),
     };
-    
-    const phoneVal = form.get("phone");
-    if (phoneVal) {
-      data.phone = String(phoneVal);
-    } else {
-      data.phone = "";
-    }
 
     try {
       await apiMutate("/user", { method: "PATCH", body: JSON.stringify(data) });
@@ -413,10 +407,12 @@ function PersonalInfoForm() {
         <Input
           id="profile-phone"
           name="phone"
-          label="Telefon Numarası (İsteğe Bağlı)"
+          label="Telefon Numarası"
           type="tel"
+          placeholder="5XX XXX XX XX"
           defaultValue={user.phone ?? ""}
           inputFilter="phone"
+          required
           error={errors.phone?.[0]}
         />
         {message && (
@@ -437,7 +433,6 @@ const CANCELLABLE_STATUSES = new Set(["pending", "confirmed"]);
 const ORDER_STATUS_COLORS: Record<Order["status"], string> = {
   pending: "bg-amber-100 text-amber-800",
   confirmed: "bg-blue-100 text-blue-800",
-  preparing: "bg-indigo-100 text-indigo-800",
   shipped: "bg-purple-100 text-purple-800",
   delivered: "bg-green-100 text-green-800",
   cancelled: "bg-red-100 text-red-800",

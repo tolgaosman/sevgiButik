@@ -67,7 +67,7 @@ export type AdminOrderLineItem = {
   lineTotal: number;
 };
 
-export type AdminOrderStatus = "pending" | "confirmed" | "preparing" | "shipped" | "delivered" | "cancelled" | "refunded";
+export type AdminOrderStatus = "pending" | "confirmed" | "shipped" | "delivered" | "cancelled" | "refunded";
 export type AdminPaymentStatus = "unpaid" | "paid" | "refunded";
 
 export type AdminOrder = {

@@ -12,7 +12,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
@@ -73,16 +72,16 @@ class OrderController extends Controller
     }
 
     /**
-     * Guest order tracking is an enumeration oracle — order numbers are
-     * sequential and guessable, so the email is the only real secret.
-     * Both "wrong number" and "wrong email" return the identical generic
-     * message, and the response never includes address or phone.
+     * Guest order tracking needs only the order number — it's random and
+     * non-sequential (see Order::generateOrderNumber), not guessable like
+     * the old id-derived numbers were. The IP rate limit below is what
+     * keeps a random 5+ digit number from being brute-forced instead.
+     * The response never includes address or phone.
      */
     public function track(Request $request): OrderTrackingResource|JsonResponse
     {
         $data = $request->validate([
             'order_number' => 'required|string|max:16',
-            'email' => 'required|email',
         ]);
 
         $key = 'order-track:'.$request->ip();
@@ -94,12 +93,11 @@ class OrderController extends Controller
         RateLimiter::hit($key, 60);
 
         $order = Order::where('order_number', $data['order_number'])
-            ->whereRaw('LOWER(email) = ?', [Str::lower($data['email'])])
             ->with('items')
             ->first();
 
         if (! $order) {
-            return response()->json(['message' => 'Sipariş bulunamadı. Sipariş numaranızı ve e-posta adresinizi kontrol edin.'], 404);
+            return response()->json(['message' => 'Sipariş bulunamadı. Sipariş numaranızı kontrol edin.'], 404);
         }
 
         RateLimiter::clear($key);

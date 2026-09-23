@@ -32,7 +32,7 @@ class OrderController extends Controller
         $order = Order::where('order_number', $orderNumber)->firstOrFail();
 
         $validated = $request->validate([
-            'status' => 'sometimes|in:pending,confirmed,preparing,shipped,delivered,cancelled,refunded',
+            'status' => 'sometimes|in:pending,confirmed,shipped,delivered,cancelled,refunded',
             'tracking_number' => 'sometimes|nullable|string|max:64',
             'payment_status' => 'sometimes|in:unpaid,paid,refunded',
             'admin_note' => 'sometimes|nullable|string|max:2000',

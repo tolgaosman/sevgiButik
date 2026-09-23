@@ -39,7 +39,6 @@ type TrackingOrder = {
 const statusLabels: Record<string, string> = {
   pending: "Bekliyor",
   confirmed: "Onaylandı",
-  preparing: "Hazırlanıyor",
   shipped: "Kargoya Verildi",
   delivered: "Teslim Edildi",
   cancelled: "İptal Edildi",
@@ -79,12 +78,11 @@ export default function OrderTrackingPage() {
 
     const form = new FormData(e.currentTarget);
     const orderNumber = String(form.get("order_number")).trim();
-    const email = String(form.get("email")).trim();
 
     try {
       const data = await apiMutate<{ data: TrackingOrder }>("/orders/track", {
         method: "POST",
-        body: JSON.stringify({ order_number: orderNumber, email }),
+        body: JSON.stringify({ order_number: orderNumber }),
       });
       setOrder(data.data);
     } catch (err) {
@@ -222,19 +220,9 @@ export default function OrderTrackingPage() {
                     id="order_number"
                     name="order_number"
                     label="Sipariş Numarası"
-                    placeholder="Örn: ORD-1234ABCD"
+                    placeholder="Örn: SB-48213"
                     required
                     error={fieldErrors.order_number?.[0]}
-                  />
-                  <Input
-                    id="email"
-                    name="email"
-                    label="E-posta Adresi"
-                    type="email"
-                    placeholder="E-posta adresiniz"
-                    inputFilter="email"
-                    required
-                    error={fieldErrors.email?.[0]}
                   />
 
                   {error && <p className="text-xs text-red-500">{error}</p>}

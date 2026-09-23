@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Reduced view for guest order tracking. Order numbers are guessable
- * (SB-10234), so this must never leak the address or phone — only the
- * email the caller already had to know to pass the lookup.
+ * Reduced view for guest order tracking. The order number is the only
+ * thing the caller had to know to pass the lookup, so this must never
+ * leak the address or phone.
  */
 class OrderTrackingResource extends JsonResource
 {

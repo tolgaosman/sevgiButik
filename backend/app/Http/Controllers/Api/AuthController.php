@@ -106,15 +106,16 @@ class AuthController extends Controller
     {
         $user = $request->user();
 
-        if ($request->has('phone') && $request->filled('phone')) {
+        if ($request->filled('phone')) {
             $request->merge(['phone' => Phone::normalize((string) $request->input('phone'))]);
         }
 
         $data = $request->validate([
             'name' => 'sometimes|string|max:255',
             'email' => 'sometimes|email|max:255|unique:users,email,'.$user->id,
-            'phone' => ['sometimes', 'nullable', 'regex:/^5\d{9}$/', 'unique:users,phone,'.$user->id],
+            'phone' => ['sometimes', 'required', 'regex:/^5\d{9}$/', 'unique:users,phone,'.$user->id],
         ], [
+            'phone.required' => 'Telefon numarası zorunludur.',
             'phone.regex' => 'Geçerli bir telefon numarası girin (Örn. 5XX XXX XX XX).',
         ]);
 

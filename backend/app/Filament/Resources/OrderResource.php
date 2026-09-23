@@ -28,7 +28,6 @@ class OrderResource extends Resource
     private const STATUS_LABELS = [
         'pending' => 'Beklemede',
         'confirmed' => 'Onaylandı',
-        'preparing' => 'Hazırlanıyor',
         'shipped' => 'Kargoya Verildi',
         'delivered' => 'Teslim Edildi',
         'cancelled' => 'İptal Edildi',
@@ -38,7 +37,6 @@ class OrderResource extends Resource
     private const STATUS_COLORS = [
         'pending' => 'warning',
         'confirmed' => 'info',
-        'preparing' => 'info',
         'shipped' => 'primary',
         'delivered' => 'success',
         'cancelled' => 'danger',
@@ -111,15 +109,10 @@ class OrderResource extends Resource
                     ->icon('heroicon-o-check-circle')
                     ->visible(fn (Order $record) => $record->status === 'pending')
                     ->action(fn (Order $record) => app(OrderService::class)->updateByAdmin($record, ['status' => 'confirmed'])),
-                Tables\Actions\Action::make('preparing')
-                    ->label('Hazırlanıyor')
-                    ->icon('heroicon-o-clock')
-                    ->visible(fn (Order $record) => $record->status === 'confirmed')
-                    ->action(fn (Order $record) => app(OrderService::class)->updateByAdmin($record, ['status' => 'preparing'])),
                 Tables\Actions\Action::make('ship')
                     ->label('Kargola')
                     ->icon('heroicon-o-truck')
-                    ->visible(fn (Order $record) => in_array($record->status, ['confirmed', 'preparing'], true))
+                    ->visible(fn (Order $record) => $record->status === 'confirmed')
                     ->form([
                         Forms\Components\TextInput::make('tracking_number')->label('Kargo Takip No')->required(),
                     ])
@@ -137,7 +130,7 @@ class OrderResource extends Resource
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')
                     ->requiresConfirmation()
-                    ->visible(fn (Order $record) => in_array($record->status, ['pending', 'confirmed', 'preparing'], true))
+                    ->visible(fn (Order $record) => in_array($record->status, ['pending', 'confirmed'], true))
                     ->action(function (Order $record) {
                         app(OrderService::class)->updateByAdmin($record, ['status' => 'cancelled']);
                         Notification::make()->title('Sipariş iptal edildi, stok geri yüklendi.')->success()->send();

@@ -11,7 +11,7 @@ import { toast } from "@/lib/toast";
 import { ORDER_STATUS_LABELS } from "@/lib/orders";
 import type { AdminOrder, AdminOrderStatus, AdminPaymentStatus } from "@/lib/admin";
 
-const STATUS_OPTIONS: AdminOrderStatus[] = ["pending", "confirmed", "preparing", "shipped", "delivered", "cancelled", "refunded"];
+const STATUS_OPTIONS: AdminOrderStatus[] = ["pending", "confirmed", "shipped", "delivered", "cancelled", "refunded"];
 const PAYMENT_STATUS_LABELS: Record<AdminPaymentStatus, string> = {
   unpaid: "Ödenmedi",
   paid: "Ödendi",
