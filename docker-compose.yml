@@ -111,6 +111,10 @@ services:
       - NEXT_PUBLIC_API_URL=/api
       - BACKEND_URL=http://backend:8000
       - INTERNAL_API_URL=http://backend:8000/api
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.butik-frontend.rule=Host(`sevgibutik.com`, `www.sevgibutik.com`)"
+      - "traefik.http.services.butik-frontend.loadbalancer.server.port=3000"
     networks:
       - coolify
 
