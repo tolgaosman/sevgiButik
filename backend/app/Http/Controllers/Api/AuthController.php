@@ -48,6 +48,12 @@ class AuthController extends Controller
 
         event(new Registered($user));
 
+        try {
+            \Illuminate\Support\Facades\Mail::to($user->email)->queue(new \App\Mail\WelcomeEmail($user));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Welcome email failed: ' . $e->getMessage());
+        }
+
         $this->loginAndMergeCart($request, $user);
 
         return new UserResource($user);

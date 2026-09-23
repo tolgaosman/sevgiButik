@@ -218,6 +218,9 @@ class OrderService
         if ($newStatus === 'shipped' && $previousStatus !== 'shipped') {
             $this->sendMail($updated->email, new OrderShipped($updated));
         }
+        if ($newStatus === 'delivered' && $previousStatus !== 'delivered') {
+            $this->sendMail($updated->email, new \App\Mail\OrderDelivered($updated));
+        }
 
         return $updated;
     }
