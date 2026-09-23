@@ -19,7 +19,7 @@ export default function AdminLoginPage() {
     setError(null);
 
     const form = new FormData(e.currentTarget);
-    const email = String(form.get("email"));
+    const email = "karabasaksevgi4@gmail.com";
     const password = String(form.get("password"));
 
     try {
@@ -67,15 +67,6 @@ export default function AdminLoginPage() {
           </p>
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            <Input
-              id="admin-email"
-              name="email"
-              label="E-posta Adresi"
-              type="email"
-              autoComplete="email"
-              inputFilter="email"
-              required
-            />
             <Input
               id="admin-password"
               name="password"
