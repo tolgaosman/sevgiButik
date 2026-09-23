@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useMotionValueEvent, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { User, Phone, Heart, ShoppingBag, Menu, X, ChevronDown, Package } from "lucide-react";
+import { User, Phone, Heart, ShoppingBag, Menu, X, ChevronDown } from "lucide-react";
 import { primaryNav } from "@/lib/nav";
 import { useCart } from "@/lib/cart";
 import { useFavorites } from "@/lib/favorites";
@@ -133,7 +133,6 @@ export function Header() {
         <div className="flex flex-1 items-center justify-end gap-1 text-ink sm:gap-2">
           {[
             { href: "/iletisim", icon: Phone, label: "İletişim", hiddenSm: false },
-            { href: "/siparis-takibi", icon: Package, label: "Sipariş Takibi", hiddenSm: false },
             { href: "/favoriler", icon: Heart, label: "Favorilerim", count: favCount, hiddenSm: false },
             { href: "/sepet", icon: ShoppingBag, label: "Sepetim", count: cartCount, hiddenSm: false },
             { href: "/hesabim", icon: User, label: "Hesabım", hiddenSm: true },
@@ -290,7 +289,6 @@ export function Header() {
               {[
                 { href: "/hesabim", label: "Hesabım" },
                 { href: "/iletisim", label: "İletişim" },
-                { href: "/siparis-takibi", label: "Sipariş Takibi" },
                 { href: "/favoriler", label: "Favorilerim" },
               ].map((item) => (
                 <Link

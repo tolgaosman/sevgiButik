@@ -206,7 +206,6 @@ export const footerLinks = {
     { label: "Çocuk", href: "/cocuk" },
   ],
   musteriHizmetleri: [
-    { label: "Siparişimi Takip Et", href: "/siparis-takibi" },
     { label: "Kargo ve Teslimat", href: "/kargo-teslimat" },
     { label: "Beden Rehberi", href: "/beden-rehberi" },
     { label: "İletişim", href: "/iletisim" },

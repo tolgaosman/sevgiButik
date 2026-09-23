@@ -22,7 +22,4 @@
 </td>
 </tr>
 </table>
-<p style="margin:16px 0 0; text-align:center; font-size:12px;">
-<a href="https://sevgibutik.com/siparis-takibi" style="color:#7a6b68; text-decoration:underline;">Siparişimi takip et</a>
-</p>
 @endsection

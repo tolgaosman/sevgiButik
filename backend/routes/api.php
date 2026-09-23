@@ -55,8 +55,6 @@ Route::delete('/cart/items/{item}', [CartController::class, 'destroy']);
 Route::delete('/cart', [CartController::class, 'clear']);
 
 
-Route::post('/orders/track', [OrderController::class, 'track']);
-
 Route::post('/contact', [ContactController::class, 'store']);
 
 Route::post('/newsletter', [NewsletterController::class, 'store'])->middleware('throttle:10,1');

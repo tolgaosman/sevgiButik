@@ -116,11 +116,11 @@ export default function OrderConfirmationPage() {
           Sipariş numaranız: {orderNumber}
         </h1>
         <p className="mt-3 text-sm text-ink-soft">
-          Sipariş detaylarınızı görüntülemek için siparişinizi takip edebilirsiniz.
+          Sipariş detaylarınızı hesabınızdaki siparişlerim bölümünden görüntüleyebilirsiniz.
         </p>
         <div className="mt-6 flex justify-center">
-          <Button href="/siparis-takibi" variant="solid">
-            Siparişimi Takip Et
+          <Button href="/hesabim" variant="solid">
+            Hesabım
           </Button>
         </div>
       </div>
@@ -186,8 +186,8 @@ export default function OrderConfirmationPage() {
       </div>
 
       <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-        <Button href="/siparis-takibi" variant="outline">
-          Siparişimi Takip Et
+        <Button href="/hesabim" variant="outline">
+          Siparişlerim
         </Button>
         <Button href="/" variant="solid">
           Alışverişe Devam Et
