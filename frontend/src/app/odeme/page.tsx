@@ -200,7 +200,7 @@ export default function CheckoutPage() {
                   required
                   error={errors.shipping_city?.[0]}
                 />
-                <Input id="shipping_postal" name="shipping_postal" label="Posta Kodu (opsiyonel)" />
+                <Input id="shipping_postal" name="shipping_postal" label="Posta Kodu (opsiyonel)" inputFilter="numeric" />
               </div>
               <div className="mt-5">
                 <label htmlFor="customer_note" className="mb-2 block text-sm font-medium text-ink-soft pl-1">

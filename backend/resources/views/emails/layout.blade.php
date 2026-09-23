@@ -13,7 +13,7 @@
   supported-color-schemes: light;
 }
 @media only screen and (max-width: 480px) {
-  .stack-col { display:block !important; width:100% !important; box-sizing:border-box; }
+  .stack-col { display:block !important; width:100% !important; box-sizing:border-box; padding-left:0 !important; padding-right:0 !important; }
 }
 </style>
 </head>

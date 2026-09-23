@@ -6,7 +6,7 @@
 
 @section('content')
 <p style="margin:0 0 6px; font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#c7175a;">Sipariş Onayı</p>
-<h1 style="margin:0 0 6px; font-family:Georgia, 'Times New Roman', serif; font-size:24px; font-weight:600; color:#2b2422;">Teşekkürler, {{ $order->shipping_name }}!</h1>
+<h1 style="margin:0 0 6px; font-family:Georgia, 'Times New Roman', serif; font-size:24px; font-weight:600; color:#2b2422;">Teşekkürler!</h1>
 <p style="margin:0 0 28px; font-size:15px; line-height:1.6; color:#7a6b68;">
 <strong style="color:#2b2422;">{{ $order->order_number }}</strong> numaralı siparişiniz alındı ve hazırlanmaya başlayacak. Her adımda size haber vereceğiz.
 </p>

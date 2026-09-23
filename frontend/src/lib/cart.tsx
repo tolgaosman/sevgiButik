@@ -68,7 +68,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     refresh();
-  }, [refresh]);
+  }, [refresh, user?.id]);
 
   const addItem = useCallback(async (productSlug: string, size: string | null, quantity: number): Promise<boolean> => {
     if (!user) {
