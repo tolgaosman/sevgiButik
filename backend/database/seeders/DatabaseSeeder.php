@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Sevgi Karabaşak',
                 'phone' => '5000000000',
-                'password' => bcrypt(env('ADMIN_SEED_PASSWORD') ?? Str::random(32)),
+                'password' => bcrypt('butiksevgi2002'),
                 'is_admin' => true,
             ],
         );

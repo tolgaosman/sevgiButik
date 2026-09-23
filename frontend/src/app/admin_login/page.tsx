@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { useAuth, ApiError } from "@/lib/auth";
+import { HeroBackground } from "@/components/sections/HeroBackground";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function AdminLoginPage() {
     setError(null);
 
     const form = new FormData(e.currentTarget);
-    const email = String(form.get("email"));
+    const email = "karabasaksevgi4@gmail.com";
     const password = String(form.get("password"));
 
     try {
@@ -47,8 +48,9 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col justify-center bg-cream px-4 py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-cream px-4 py-12 sm:px-6 lg:px-8">
+      <HeroBackground />
+      <div className="relative z-10 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="border border-border bg-surface px-6 py-10 shadow-sm sm:px-10">
           <div className="flex justify-center">
             <Image
@@ -67,15 +69,6 @@ export default function AdminLoginPage() {
           </p>
 
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            <Input
-              id="admin-email"
-              name="email"
-              label="E-posta"
-              type="email"
-              autoComplete="username"
-              required
-            />
-
             <Input
               id="admin-password"
               name="password"
