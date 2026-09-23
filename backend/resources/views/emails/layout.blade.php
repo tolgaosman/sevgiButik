@@ -17,14 +17,14 @@
 }
 </style>
 </head>
-<body class="body" style="margin:0; padding:0; background-color:#fdf4f7; font-family:'Raleway', Helvetica, Arial, sans-serif; color:#2b2422;">
+<body class="body" style="margin:0; padding:0; background-color:#fdf4f7; background-image:url('{{ rtrim(config('app.url'), '/') }}/mail-pattern.png'); background-repeat:repeat; background-size:300px auto; font-family:'Raleway', Helvetica, Arial, sans-serif; color:#2b2422;">
 @hasSection('preheader')
 <div style="display:none; max-height:0; max-width:0; overflow:hidden; opacity:0; mso-hide:all;">
 @yield('preheader')
 &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
 </div>
 @endif
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#fdf4f7;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#fdf4f7; background-image:url('{{ rtrim(config('app.url'), '/') }}/mail-pattern.png'); background-repeat:repeat; background-size:300px auto;">
 <tr>
 <td align="center" style="padding:40px 16px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;">
