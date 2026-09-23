@@ -37,7 +37,6 @@ x-backend-env: &backend-env
 services:
   db:
     image: mysql:8.0
-    container_name: butik-db
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ${DB_DATABASE:-butik}
@@ -56,7 +55,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: butik-backend
     restart: unless-stopped
     depends_on:
       db:
@@ -72,7 +70,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: butik-queue
     restart: unless-stopped
     command: ["sh", "-c", "php artisan queue:work --tries=3 --backoff=10"]
     depends_on:
@@ -89,7 +86,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: butik-scheduler
     restart: unless-stopped
     command: ["sh", "-c", "php artisan schedule:work"]
     depends_on:
@@ -106,7 +102,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: butik-frontend
     restart: unless-stopped
     depends_on:
       - backend
@@ -114,8 +109,6 @@ services:
       - NEXT_PUBLIC_API_URL=/api
       - BACKEND_URL=http://backend:8000
       - INTERNAL_API_URL=http://backend:8000/api
-    ports:
-      - "4000:3000"
 
 
 
