@@ -2,7 +2,7 @@ x-backend-env: &backend-env
   APP_ENV: production
   APP_DEBUG: "false"
   APP_KEY: ${APP_KEY:?APP_KEY zorunlu - php artisan key:generate --show ile uretip .env dosyasina koyun}
-  APP_URL: https://sevgibutik.com
+  APP_URL: ${APP_URL:-http://5.75.128.196:4000}
   APP_LOCALE: tr
   DB_CONNECTION: mysql
   DB_HOST: db
@@ -10,13 +10,13 @@ x-backend-env: &backend-env
   DB_DATABASE: ${DB_DATABASE:-butik}
   DB_USERNAME: ${DB_USERNAME:-butikuser}
   DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD zorunlu}
-  FRONTEND_URL: https://sevgibutik.com
-  SANCTUM_STATEFUL_DOMAINS: sevgibutik.com
-  # Next.js her /api ve /sanctum cagrisini ayni origin'den (sevgibutik.com) proxy'ler,
+  FRONTEND_URL: ${FRONTEND_URL:-http://5.75.128.196:4000}
+  SANCTUM_STATEFUL_DOMAINS: ${SANCTUM_STATEFUL_DOMAINS:-5.75.128.196,5.75.128.196:4000,localhost,localhost:4000}
+  # Next.js her /api ve /sanctum cagrisini ayni origin'den proxy'ler,
   # bu yuzden tarayicinin gordugu cookie Domain'i de bu olmali.
-  SESSION_DOMAIN: sevgibutik.com
+  SESSION_DOMAIN: ${SESSION_DOMAIN:-5.75.128.196}
   SESSION_DRIVER: database
-  SESSION_SECURE_COOKIE: "true"
+  SESSION_SECURE_COOKIE: "${SESSION_SECURE_COOKIE:-false}"
   CACHE_STORE: database
   QUEUE_CONNECTION: ${QUEUE_CONNECTION:-database}
   # Varsayilan mailer Resend'in API'si (resend/resend-php uzerinden) - SMTP'ye
