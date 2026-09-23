@@ -45,6 +45,8 @@ services:
       MYSQL_USER: ${DB_USERNAME:-butikuser}
     volumes:
       - db-data:/var/lib/mysql
+    networks:
+      - coolify
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
       interval: 5s
@@ -109,8 +111,12 @@ services:
       - NEXT_PUBLIC_API_URL=/api
       - BACKEND_URL=http://backend:8000
       - INTERNAL_API_URL=http://backend:8000/api
+    networks:
+      - coolify
 
-
+networks:
+  coolify:
+    external: true
 
 volumes:
   db-data:
