@@ -1,1 +1,111 @@
-$content
+x-backend-env: &backend-env
+  APP_ENV: production
+  APP_DEBUG: "false"
+  APP_KEY: ${APP_KEY:?APP_KEY zorunlu - php artisan key:generate --show ile uretip .env dosyasina koyun}
+  APP_URL: ${APP_URL:-http://5.75.128.196:4000}
+  APP_LOCALE: tr
+  DB_CONNECTION: mysql
+  DB_HOST: db
+  DB_PORT: 3306
+  DB_DATABASE: ${DB_DATABASE:-butik}
+  DB_USERNAME: ${DB_USERNAME:-butikuser}
+  DB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD zorunlu}
+  FRONTEND_URL: ${FRONTEND_URL:-http://5.75.128.196:4000}
+  SANCTUM_STATEFUL_DOMAINS: ${SANCTUM_STATEFUL_DOMAINS:-5.75.128.196,5.75.128.196:4000,localhost,localhost:4000}
+  # Next.js her /api ve /sanctum cagrisini ayni origin'den proxy'ler,
+  # bu yuzden tarayicinin gordugu cookie Domain'i de bu olmali.
+  SESSION_DOMAIN: ${SESSION_DOMAIN:-5.75.128.196}
+  SESSION_DRIVER: database
+  SESSION_SECURE_COOKIE: "${SESSION_SECURE_COOKIE:-false}"
+  CACHE_STORE: database
+  QUEUE_CONNECTION: ${QUEUE_CONNECTION:-database}
+  # Varsayilan mailer Resend'in API'si (resend/resend-php uzerinden) - SMTP'ye
+  # donmek isteyen MAIL_MAILER=smtp verip MAIL_HOST/USERNAME/PASSWORD doldurabilir.
+  MAIL_MAILER: ${MAIL_MAILER:-resend}
+  RESEND_API_KEY: ${RESEND_API_KEY:?RESEND_API_KEY zorunlu - siparis/kargo/sifre e-postalari icin Resend panelinden alin}
+  MAIL_HOST: ${MAIL_HOST:-}
+  MAIL_PORT: ${MAIL_PORT:-587}
+  MAIL_USERNAME: ${MAIL_USERNAME:-}
+  MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+  MAIL_SCHEME: ${MAIL_SCHEME:-}
+  # Yalnizca `docker compose run --rm backend php artisan migrate --seed`
+  # calistirirken gerekir - normal `up` akisinda okunmaz.
+  ADMIN_SEED_PASSWORD: ${ADMIN_SEED_PASSWORD:-}
+  MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS:-siparis@sevgibutik.com}
+  MAIL_FROM_NAME: ${MAIL_FROM_NAME:-Sevgi Butik}
+
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-butik}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?DB_ROOT_PASSWORD zorunlu - DB_PASSWORD'dan farkli, ayri bir sifre kullanin}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD zorunlu}
+      MYSQL_USER: ${DB_USERNAME:-butikuser}
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      <<: *backend-env
+    volumes:
+      - backend-storage:/var/www/storage/app/public
+
+  queue:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    command: ["sh", "-c", "php artisan queue:work --tries=3 --backoff=10"]
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      <<: *backend-env
+    volumes:
+      - backend-storage:/var/www/storage/app/public
+
+  scheduler:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    command: ["sh", "-c", "php artisan schedule:work"]
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      <<: *backend-env
+    volumes:
+      - backend-storage:/var/www/storage/app/public
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      - NEXT_PUBLIC_API_URL=/api
+      - BACKEND_URL=http://backend:8000
+      - INTERNAL_API_URL=http://backend:8000/api
+    ports:
+      - "4000:3000"
+
+volumes:
+  db-data:
+  backend-storage:
